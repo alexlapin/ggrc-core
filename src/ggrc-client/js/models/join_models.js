@@ -132,13 +132,10 @@ import RefreshQueue from './refresh_queue';
       this.content = revision.content;
     },
     display_name: function () {
-      return '';
+      return this._super.call(this.revision.content);
     },
-    title: function () {
-      return '';
-    },
-    description: function () {
-      return '';
+    display_type: function () {
+      return this._super.call(this.revision.content);
     },
   });
 

@@ -739,6 +739,53 @@ describe('GGRC.Components.revisionLog', function () {
         },
       });
     });
+
+    it('returns correct change information when map with ' +
+      '"snapshot" objects',
+    function () {
+      let snapshotRevision = {
+        modified_by: 'User 17',
+        updated_at: new Date('2015-05-17T17:24:01'),
+        action: 'created',
+        content: {
+          updated_at: new Date('2018-02-14T10:46:02'),
+          description: 'Description for: CustomControl',
+          title: 'CustomControl',
+          type: 'Control',
+        },
+      };
+
+      let revision = {
+        modified_by: 'User 17',
+        updated_at: new Date('2015-05-17T17:24:01'),
+        action: 'created',
+        destination: {
+          revision: snapshotRevision,
+          display_type: function () {
+            return snapshotRevision.content.type;
+          },
+          display_name: function () {
+            return snapshotRevision.content.title;
+          },
+        },
+        source_id: 99,
+        source_type: 'OtherObject',
+      };
+
+      let result = viewModel._mappingChange(revision, [revision]);
+
+      expect(result).toEqual({
+        madeBy: 'User 17',
+        role: 'none',
+        updatedAt: new Date('2015-05-17T17:24:01'),
+        changes: {
+          origVal: '—',
+          newVal: 'Created',
+          fieldName: 'Mapping to Control: CustomControl',
+        },
+      });
+    }
+    );
   });
 
   describe('_computeRoleChanges method', function () {
